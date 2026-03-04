@@ -53,6 +53,7 @@ export default function App() {
               <Route path="/scan/:id" component={ScanDetail} />
               <Route path="/clinic/:id" component={ClinicDetail} />
               <Route path="/equipment/:id" component={EquipmentDetail} />
+              <Route path="/login" component={Login} />
               
               {/* المسار المحمي */}
               <Route path="/profile">
