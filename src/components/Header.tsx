@@ -4,12 +4,16 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { useBooking } from "../contexts/BookingContext";
 import { Logo } from "./Logo";
+import { useAuth } from "../contexts/AuthContext";
 
 export function Header() {
   const { openBooking } = useBooking();
   const [showSearch, setShowSearch] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  // استدعاء بيانات المستخدم
+  const { user } = useAuth();
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -98,6 +102,7 @@ export function Header() {
                   <Search className="h-5 w-5" />
                 </Button>
               )}
+              
               <Button 
                 className="bg-[#3DBEAE] hover:bg-[#3DBEAE]/90 text-white"
                 onClick={openBooking}
@@ -105,10 +110,25 @@ export function Header() {
                 <Calendar className="h-5 w-5 mr-2" />
                 احجز الآن
               </Button>
-              <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
-                <User className="h-5 w-5 mr-2" />
-                تسجيل
-              </Button>
+
+              {/* ⬇️⬇️⬇️ التغيير هنا: زر تسجيل الدخول للشاشات الكبيرة ⬇️⬇️⬇️ */}
+              {user ? (
+                <Link href="/profile">
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                    <User className="h-5 w-5 mr-2" />
+                    {user.name}
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/login">
+                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground">
+                    <User className="h-5 w-5 mr-2" />
+                    تسجيل دخول
+                  </Button>
+                </Link>
+              )}
+              {/* ⬆️⬆️⬆️ نهاية التغيير ⬆️⬆️⬆️ */}
+
             </div>
 
             {/* Mobile Menu Button and Actions */}
@@ -181,6 +201,7 @@ export function Header() {
                   الفحوصات
                 </span>
               </Link>
+              
               <Button 
                 className="bg-[#3DBEAE] hover:bg-[#3DBEAE]/90 text-white w-full"
                 onClick={() => {
@@ -191,10 +212,25 @@ export function Header() {
                 <Calendar className="h-5 w-5 mr-2" />
                 احجز الآن
               </Button>
-              <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full">
-                <User className="h-5 w-5 mr-2" />
-                تسجيل
-              </Button>
+
+              {/* ⬇️⬇️⬇️ التغيير هنا: زر تسجيل الدخول للموبايل ⬇️⬇️⬇️ */}
+              {user ? (
+                <Link href="/profile" onClick={closeMobileMenu}>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full justify-center">
+                    <User className="h-5 w-5 mr-2" />
+                    ملفي ({user.name})
+                  </Button>
+                </Link>
+              ) : (
+                <Link href="/login" onClick={closeMobileMenu}>
+                  <Button className="bg-accent hover:bg-accent/90 text-accent-foreground w-full justify-center">
+                    <User className="h-5 w-5 mr-2" />
+                    تسجيل دخول
+                  </Button>
+                </Link>
+              )}
+               {/* ⬆️⬆️⬆️ نهاية التغيير ⬆️⬆️⬆️ */}
+               
             </nav>
           </div>
         )}
