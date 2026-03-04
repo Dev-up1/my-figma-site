@@ -18,7 +18,17 @@ import { ScanDetail } from "./pages/ScanDetail";
 import { ClinicDetail } from "./pages/ClinicDetail";
 import { EquipmentDetail } from "./pages/EquipmentDetail";
 
+// 1. تأكد أنك أنشأت صفحة البروفايل واستدعيها هنا
+// (إذا لم يكن لديك ملف Profile.tsx في مجلد pages، أخبرني لننشئه)
+import { Profile } from "./pages/Profile"; 
+
 export default function App() {
+  
+  // 2. هذا المتغير يحدد ما إذا كان الشخص مسجل دخول أم لا
+  // حالياً سأضعه يعتمد على "localStorage" كحل مؤقت وسريع
+  // إذا كان لديك نظام Context لتسجيل الدخول سنقوم بتعديل هذا السطر لاحقاً
+  const isLoggedIn = localStorage.getItem("user") !== null;
+
   return (
     <BookingProvider>
       <div className="min-h-screen flex flex-col">
@@ -38,6 +48,12 @@ export default function App() {
             <Route path="/scan/:id" component={ScanDetail} />
             <Route path="/clinic/:id" component={ClinicDetail} />
             <Route path="/equipment/:id" component={EquipmentDetail} />
+
+            {/* 3. هنا أضفنا المسار المحمي لصفحة ملف المريض */}
+            <Route path="/profile">
+              {isLoggedIn ? <Profile /> : <Redirect to="/" />}
+            </Route>
+
             <Route>
               <Redirect to="/" />
             </Route>
